@@ -38,6 +38,11 @@ module "vpc" {
     vpc_id = module.vpc.vpc_id
   }
 
+  module "ecs-task-execution-role" {
+    source          = "../modules/ecs-tasks-execution-role"
+    my_project_name = module.vpc.my_project_name
+  }
+
   module "acm" {
     source           = "../modules/acm"
     domain_name      = var.domain_name
