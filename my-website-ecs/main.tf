@@ -37,14 +37,9 @@ module "vpc" {
     source = "../modules/security groups"
     vpc_id = module.vpc.vpc_id
   }
-  
- /* module "ec2_instance" {
-  source = "../modules/ec2-instance"
 
-  ami_id              = ami-1234567890abcdef0
-  instance_type       = t2.micro
-  subnet_id           = module.vpc.public_subnet_az1_id
-  security_group_ids  = module.security_group
-  key_name            = my_keypair
+  module "acm" {
+    source           = "../modules/acm"
+    domain_name      = var.domain_name
+    alternative_name = var.alternative_name
 }
-*/
