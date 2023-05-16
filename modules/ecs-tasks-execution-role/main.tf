@@ -10,6 +10,42 @@ data "aws_iam_policy_document" "ecs_tasks_execution_role_policy" {
   }
 }
 
+# create iam policy document
+data "aws_iam_policy_document" "ecs_task_execution_policy_document" {
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.project_name}-${var.env_file_bucket_name}/*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:GetBucketLocation"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.project_name}-${var.env_file_bucket_name}"
+    ]
+  }
+}
+
 # create an iam role
 resource "aws_iam_role" "ecs_tasks_execution_role" {
   name                = "${var.my_project_name}-ecs-task-execution-role"
