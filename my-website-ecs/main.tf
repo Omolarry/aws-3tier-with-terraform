@@ -2,7 +2,7 @@ locals {
   region             = var.region
   project_namee      = var.my_project_name
   environment        = var.enviroment
-  profile    = "default"
+  profile            = "default"
 }
 
 #create VPC

@@ -66,7 +66,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 
 # create ecs service
 resource "aws_ecs_service" "ecs_service" {
-  name                               = "${var.project_name}-${var.environment}-service"
+  name                               = "${var.my_project_name}-${var.environment}-service"
   launch_type                        = "FARGATE"
   cluster                            = aws_ecs_cluster.ecs_cluster.id
   task_definition                    = aws_ecs_task_definition.ecs_task_definition.arn
@@ -89,7 +89,7 @@ resource "aws_ecs_service" "ecs_service" {
   # load balancing
   load_balancer {
     target_group_arn = var.alb_target_group_arn
-    container_name   = "${var.project_name}-${var.environment}-container"
+    container_name   = "${var.my_project_name}-${var.environment}-container"
     container_port   = 80
   }
 }

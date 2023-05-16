@@ -24,3 +24,15 @@ alternative_name                = "*.techychef.xyz"
 # alb variables
 target_type = "ip"
 
+# s3 variables
+env_file_bucket_name = "techychef-ecs-env-file-bucket"
+env_file_name        = "rentzone.env"
+
+
+# ecs varaiables
+architecture    = "X86_64"
+container_image = "910883278292.dkr.ecr.us-east-1.amazonaws.com/rentzone:latest"
+
+# route-53 variables
+record_name = "www"
+

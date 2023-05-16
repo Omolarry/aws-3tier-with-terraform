@@ -1,3 +1,5 @@
+variable "my_project_name" {}
+variable "environment" {}
 variable "public_subnet_az1_id" {}
 variable "internet_gateway" {}
 variable "public_subnet_az2_id" {}

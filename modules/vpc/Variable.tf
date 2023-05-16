@@ -1,5 +1,6 @@
 variable "region" {}
 variable "my_project_name" {}
+variable "environment" {}
 variable "vpc_cidr" {}
 variable "public_subnet_az1_cidr" {}
 variable "public_subnet_az2_cidr" {}

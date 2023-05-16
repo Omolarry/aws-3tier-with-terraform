@@ -1,6 +1,6 @@
 # create security group for the application load balancer
 resource "aws_security_group" "alb_security_group" {
-  name        = "alb security group"
+  name        =  "${var.my_project_name}-${var.environment}-alb-sg"
   description = "enable http/https access on port 80/443"
   vpc_id      =  var.vpc_id
 
@@ -30,39 +30,72 @@ resource "aws_security_group" "alb_security_group" {
 
 
   tags   = {
-    Name = "alb security group"
+    Name =  "${var.my_project_name}-${var.environment}-alb-sg"
   }
 
 # create security group for the container
 resource "aws_security_group" "ecs_security_group" {
-  name        = "ecs security group"
+  name        = "${var.my_project_name}-${var.environment}-bastion-sg"
   description = "enable http/https access on port 80/443 via alb sg"
   vpc_id      = var.vpc_id
-
   ingress {
-    description      = "http access"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.alb_security_group.id]
+    description     = "http access"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_security_group.id]
   }
 
   ingress {
-    description      = "https access"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.alb_security_group.id]
+    description     = "https access"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups =  [aws_security_group.alb_security_group.id]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = -1
-    cidr_blocks      = ["0.0.0.0/1"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags   = {
-    Name = "ecs security group"
+  tags = {
+    Name = "${var.my_project_name}-${var.environment}-app-server-sg"
+  }
+}
+
+# create security group for the database
+resource "aws_security_group" "database_security_group" {
+  name        = "${var.my_project_name}-${var.environment}-database-sg"
+  description = "enable mysql/aurora access on port 3306"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description     = "mysql/aurora access"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.app_server_security_group.id]
+  }
+
+  ingress {
+    description     = "custom access"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion_security_group.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.my_project_name}-${var.environment}-database-sg"
   }
 }
